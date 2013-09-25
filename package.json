@@ -1,6 +1,6 @@
 {
   "name": "factory_girl",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "port features from factory_girl rails to nodejs",
   "main": "index.js",
   "scripts": {

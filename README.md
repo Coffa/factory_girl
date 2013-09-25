@@ -22,11 +22,16 @@ FactoryGirl.define('user', function() {
 
 FactoryGirl.define('profile', function() {
 	this.id = 1;
+	this.create_lists('detail', 2); # => 2: the number of association which were created
+})
+
+FactoryGirl.define('detail', function() {
+	this.id = 1;
 })
 
 var user = Factory.create('user');
 user.attributes() # => {id: 1}
-user.toJSON() # => {id: 1, profile: {id: 1}}
+user.toJSON() # => {id: 1, profile: {id: 1, user_id: 1, detail: [{id: 1, profile_id: 1}, {id: 1, profile_id: 1}]}}
 
 FactoryGirl.attributes_for('user') # => {id: 1}
 ```
