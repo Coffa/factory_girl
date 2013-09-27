@@ -8,30 +8,85 @@ Node.js:
 
     npm install 'factory_girl'
 
-## Defining Factories
+## Usage
 
-Javascript
+### Define factory
 
 ``` js
-var FactoryGirl = require('factory_girl');
+var FactoryGirl = require('factory_girl'); // for nodejs
+```
+
+``` js
 
 FactoryGirl.define('user', function() {
-	this.id = 1;
-	this.association('profile');
+	this.id = Math.random()*101|0;
+	this.title = 'That\'s awesome day';
+	this.emotion = 'happy';
+})
+```
+
+### Using factories
+
+``` js
+	user = FactoryGirl.create('user'); // create instance user
+	user.attributes(); // => {id: 1, title: 'That\'s awesome day', emotion: 'happy'}
+```
+
+It's possible to override the defined attributes by passing a json:
+``` js
+	user = FactoryGirl.create('user', {id: 2});
+	user.attributes(); // => {id: 2, ....}
+	FactoryGirl.attributesFor('user') // => {id: 1, ...}
+	FactoryGirl.defined('user') // => true
+```
+
+### Aliases
+
+``` js
+FactoryGirl.define('user', {alias: 'doctor'}, function () {
+	// same above
+})
+```
+
+`FactorGirl.create('user')` is equal to `FactoryGirl.create('doctor')`
+
+another thing is you can pass to array to alias  `{alias: ['doctor', 'patient']`
+
+### Inheritance
+
+``` js
+FactorlGirl.define('doctor', {inherit: 'user'}, function() {
+	this.id = 2;
+	this.label = 'Dr';
 })
 
+var doctor = Factory.create('doctor');
+doctor.attributes() // => {id: 2, title: 'That\'s awesome day', emotion: 'happy', label: 'Dr'}
+```
+
+### Association
+``` js
 FactoryGirl.define('profile', function() {
-	this.id = 1;
-	this.create_lists('detail', 2); # => 2: the number of association which were created
+	this.id = 2;
+	this.label = 'Dr';
+	this.belongTo('user');
 })
 
-FactoryGirl.define('detail', function() {
-	this.id = 1;
+FactoryGirl.define('place', function() {
+	this.id = 2;
+	this.label = 'New York';
+	this.hasOne('user');
 })
 
-var user = FactoryGirl.create('user');
-user.attributes() # => {id: 1}
-user.toJSON() # => {id: 1, profile: {id: 1, user_id: 1, detail: [{id: 1, profile_id: 1}, {id: 1, profile_id: 1}]}}
+var profile = FactoryGirl.create('profile');
+profile.attributes() // => {label: 'Dr'};
+profile.toJSON() // => {id: 2, label: 'Dr', user_id: 1, user: {id: 1, title: 'That\'s awesome day', emotion: 'happy'}}
 
-FactoryGirl.attributes_for('user') # => {id: 1}
+var place = FactoryGirl.create('place');
+profile.toJSON() // => {id: 2, label: 'New York', user: {id: 1, place_id: 2, ...}}
+```
+
+### Create Multi Object
+``` js
+FactoryGirl.createLists('user') => [{id: 1, ...}, {id: 23, ....}]
 ```
