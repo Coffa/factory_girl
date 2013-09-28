@@ -1,0 +1,2 @@
+
+})(FactoryGirl = ('undefined' === typeof module ? {} : module.exports), {}, this);

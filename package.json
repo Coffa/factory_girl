@@ -1,6 +1,7 @@
 {
   "name": "factory_girl",
-  "version": "0.0.3",
+  "version": "0.1.0",
+  "codename": "black",
   "description": "port features from factory_girl rails to nodejs",
   "main": "index.js",
   "scripts": {
@@ -30,6 +31,7 @@
     "grunt-contrib-uglify": "~0.2.4",
     "grunt-karma": "git://github.com/MQuy/grunt-karma",
     "grunt-shell": "~0.3.1",
+    "shelljs": "~0.1.4",
     "bower": "~1.2.2",
     "karma": "~0.11",
     "karma-mocha": "~0.1.0",

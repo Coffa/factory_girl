@@ -1,0 +1,7 @@
+/**
+ * @license FactoryGirl v0.1.0
+ * (c) 2012-2013 Coffa Team https://github.com/Coffa
+ * License: MIT
+ */
+
+(function(FactoryGirl, exports, global) {

@@ -1,1 +1,1 @@
-module.exports = require('./lib/factory_girl')
+module.exports = require('./build/factory_girl.min.js')

@@ -1,3 +1,6 @@
+var files = require('./buildFiles').files;
+var util = require('./lib/grunt/utils.js');
+
 module.exports = function(grunt) {
 
   grunt.loadNpmTasks('grunt-shell');
@@ -8,11 +11,14 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-connect');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-karma');
+  grunt.loadTasks('lib/grunt');
 
-  var version = '0.1.0';
-  var dist = 'factory_girl-' + version;
+  var version = util.getVersion();
+  var dist = 'factory_girl-' + version.full;
 
   grunt.initConfig({
+    VERSION: version,
+
     connect: {
       testserver: {
         options: {
@@ -41,11 +47,18 @@ module.exports = function(grunt) {
       build: ['build']
     },
 
+    build: {
+      factory: {
+        dest: 'build/factory_girl.js',
+        src: util.wrap([files['src']], 'module')
+      }
+    },
+
     uglify: {
       build: {
         files: [{
-          src: 'lib/*.js',
-          dest: 'build/factory_girl.js',
+          src: 'build/factory_girl.js',
+          dest: 'build/factory_girl.min.js',
         }]
       }
     },
@@ -61,7 +74,7 @@ module.exports = function(grunt) {
   grunt.registerTask('test', ['karma:unit']);
 
   grunt.registerTask('webserver', ['connect:testserver']);
-  grunt.registerTask('minify', ['clean', 'uglify']);
-  grunt.registerTask('package', ['clean', 'uglify', 'compress']);
+  grunt.registerTask('minify', ['clean', 'build', 'uglify']);
+  grunt.registerTask('package', ['minify', 'compress']);
   grunt.registerTask('default', ['package']);
 };
