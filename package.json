@@ -11,11 +11,36 @@
     "url": "https://github.com/Coffa/factory_girl"
   },
   "keywords": [
-    "factory", "seed", "jasmine", "data"
+    "factory",
+    "seed",
+    "jasmine",
+    "data"
   ],
   "author": "MQuy90",
   "license": "BSD-2-Clause",
   "bugs": {
     "url": "https://github.com/Coffa/factory_girl/issues"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-contrib-clean": "~0.5.0",
+    "grunt-contrib-compress": "~0.5.2",
+    "grunt-contrib-connect": "~0.3.0",
+    "grunt-contrib-concat": "~0.3.0",
+    "grunt-contrib-uglify": "~0.2.4",
+    "grunt-karma": "git://github.com/MQuy/grunt-karma",
+    "grunt-shell": "~0.3.1",
+    "bower": "~1.2.2",
+    "karma": "~0.11",
+    "karma-mocha": "~0.1.0",
+    "karma-chrome-launcher": "~0.1.0",
+    "karma-safari-launcher": "~0.1.0",
+    "karma-firefox-launcher": "~0.1.0",
+    "karma-ng-scenario": "~0.1.0",
+    "karma-script-launcher": "~0.1.0",
+    "chai": "~1.8.0",
+    "karma-opera-launcher": "~0.1.0",
+    "karma-ie-launcher": "~0.1.1",
+    "grunt-contrib-copy": "~0.4.1"
   }
 }
