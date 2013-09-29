@@ -15,20 +15,32 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
       'src/*.js',
-      'test/mocha.conf.js',
       'node_modules/chai/chai.js',
+      'test/mocha.conf.js',
       {pattern: 'test/lib/*.js', included: true}
     ],
 
 
     // test results reporter to use
     // possible values: 'dots', 'progress', 'junit', 'growl', 'coverage'
-    reporters: ['progress'],
+    reporters: ['progress', 'coverage'],
 
+    preprocessors: {
+        'src/*.js': ['coverage']
+    },
+
+    coverageReporter: {
+        type : 'html',
+        dir : 'coverage/'
+    },
+
+    junitReporter: {
+        outputFile: 'test-results.xml',
+        suite: ''
+    },
 
     // web server port
-    port: 9876,
-
+    port: 9875,
 
     // enable / disable colors in the output (reporters and logs)
     colors: true,
@@ -51,7 +63,7 @@ module.exports = function(config) {
     // - Safari (only Mac)
     // - PhantomJS
     // - IE (only Windows)
-    browsers: ['Chrome'/*, 'Firefox', 'Safari', 'PhantomJS', 'Opera', 'IE'*/],
+    browsers: ['PhantomJS'],
 
 
     // If browser does not capture in given timeout [ms], kill it
