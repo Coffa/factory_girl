@@ -1,7 +1,7 @@
-'use strict';
+;(function(FactoryGirl, libAPI, global) {
+	'use strict';
 
-(function(FactoryGirl, exports, global) {
-	exports.version = {
+	libAPI.version = {
 		full: '"VERSION_FULL"',
 		major: "VERSION_MAJOR",
 		minor: "VERSION_MINOR",
@@ -9,50 +9,58 @@
 		codeName: '"VERSION_CODENAME"'
 	};
 
-	exports.define = function(name) {
+	libAPI.define = function(name) {
 		var callback = arguments[arguments.length - 1],
 		opts = arguments.length === 3 ? arguments[1] : {};
 		if (typeof callback === 'function') {
-			exports.datum.setDefined(name, opts, callback);
+			libAPI.datum.setDefined(name, opts, callback);
 		} else {
 			throw Error('argument must be a function')
 		}
 	};
 
-	exports.defined = function(name) {
-		try { exports.datum.checkDefined() }
+	libAPI.defined = function(name) {
+		try { libAPI.datum.checkDefined() }
 		catch(e) { return false }
 		return true;
 	};
 
-	exports.create = function(name) {
-		return exports.datum.createFactory(name);
+	libAPI.create = function(name) {
+		return libAPI.datum.createFactory(name);
 	};
 
-	exports.createLists = function(name, num) {
+	libAPI.createLists = function(name, num) {
 		var lists = [];
 		while(num--) {
-			lists.push(exports.datum.createFactory(name));
+			lists.push(libAPI.datum.createFactory(name));
 		}
 		return lists;
 	};
 
-	exports.attributesFor = function(name) {
-		var define = exports.datum.getDefined(name),
-		model = new exports.Model(name);
+	libAPI.attributesFor = function(name) {
+		var define = libAPI.datum.getDefined(name),
+		model = new libAPI.Model(name);
 		define.call(model);
 		return model.attributes();
 	};
 
-	FactoryGirl.version = exports.version;
-	FactoryGirl.define = exports.define;
-	FactoryGirl.defined = exports.defined;
-	FactoryGirl.create = exports.create;
-	FactoryGirl.createLists = exports.createLists;
-	FactoryGirl.attributesFor = exports.attributesFor;
+	libAPI.clear = function(name) {
+		if (name) {
+			libAPI.datum.remove(name);
+		} else {
+			libAPI.datum.clear();
+		}
+	};
+
+	FactoryGirl.version = libAPI.version;
+	FactoryGirl.define = libAPI.define;
+	FactoryGirl.defined = libAPI.defined;
+	FactoryGirl.create = libAPI.create;
+	FactoryGirl.createLists = libAPI.createLists;
+	FactoryGirl.attributesFor = libAPI.attributesFor;
+	FactoryGirl.clear = libAPI.clear;
 })(
 	FactoryGirl = (typeof FactoryGirl === 'undefined' ? {} : FactoryGirl),
-	exports = (typeof exports === 'undefined' ? {} : exports),
+	libAPI = (typeof libAPI === 'undefined' ? {} : libAPI),
 	global
 );
-

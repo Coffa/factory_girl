@@ -1,7 +1,7 @@
-'use strict';
+;(function(libAPI, global) {
+	'use strict';
 
-(function(exports, global) {
-	exports.datum = new Data();
+	libAPI.datum = new Data();
 
 	var container = {};
 
@@ -44,9 +44,22 @@
 
 	Data.prototype.createFactory = function(name) {
 		var define = this.getDefined(name),
-		factory = new exports.Model(name);
+		factory = new libAPI.Model(name);
 		container[name]['factories'].push(factory);
 		define.call(factory);
 		return factory;
 	};
-})(exports = (typeof exports === 'undefined' ? {} : exports), global);
+
+	Data.prototype.remove = function(name) {
+		this.checkDefined(name);
+		delete container[name];
+	};
+
+	Data.prototype.clear = function() {
+		for(prop in container) {
+			if (container.hasOwnProperty(prop)) {
+				this.remove(prop);
+			}
+		}
+	};
+})(libAPI = (typeof libAPI === 'undefined' ? {} : libAPI), global);

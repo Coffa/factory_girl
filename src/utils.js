@@ -1,8 +1,10 @@
-'use strict';
+;(function(libAPI, global) {
+	'use strict';
 
-(function(exports, global) {
-	exports.utils = {};
-	exports.utils.merge = function(target, source, keep) {
+	libAPI.utils = {};
+	libAPI.utils.merge = function(target, source, keep) {
+		if (typeof target !== 'object') throw Error('Target must be object');
+
 		var prop;
 
 		for(prop in source) {
@@ -13,4 +15,4 @@
 			}
 		}
 	};
-})(exports = (typeof exports === 'undefined' ? {} : exports), global);
+})(libAPI = (typeof libAPI === 'undefined' ? {} : libAPI), global);

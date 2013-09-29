@@ -4,4 +4,4 @@
  * License: MIT
  */
 
-(function(FactoryGirl, exports, global) {
+(function(FactoryGirl, libAPI, global) {

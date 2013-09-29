@@ -4,11 +4,14 @@
  * License: MIT
  */
 
-(function(FactoryGirl, exports, global) {'use strict';
+(function(FactoryGirl, libAPI, global) {'use strict';
 
-(function(exports, global) {
-	exports.utils = {};
-	exports.utils.merge = function(target, source, keep) {
+;(function(libAPI, global) {
+
+libAPI.utils = {};
+	libAPI.utils.merge = function(target, source, keep) {
+		if (typeof target !== 'object') throw Error('Target must be object');
+
 		var prop;
 
 		for(prop in source) {
@@ -19,10 +22,11 @@
 			}
 		}
 	};
-})(exports = (typeof exports === 'undefined' ? {} : exports), global);
+})(libAPI = (typeof libAPI === 'undefined' ? {} : libAPI), global);
 
-(function(exports, global) {
-	exports.datum = new Data();
+;(function(libAPI, global) {
+
+libAPI.datum = new Data();
 
 	var container = {};
 
@@ -65,15 +69,29 @@
 
 	Data.prototype.createFactory = function(name) {
 		var define = this.getDefined(name),
-		factory = new exports.Model(name);
+		factory = new libAPI.Model(name);
 		container[name]['factories'].push(factory);
 		define.call(factory);
 		return factory;
 	};
-})(exports = (typeof exports === 'undefined' ? {} : exports), global);
 
-(function(exports, global) {
-	exports.Model = Model;
+	Data.prototype.remove = function(name) {
+		this.checkDefined(name);
+		delete container[name];
+	};
+
+	Data.prototype.clear = function() {
+		for(prop in container) {
+			if (container.hasOwnProperty(prop)) {
+				this.remove(prop);
+			}
+		}
+	};
+})(libAPI = (typeof libAPI === 'undefined' ? {} : libAPI), global);
+
+;(function(libAPI, global) {
+
+libAPI.Model = Model;
 
 	function Model(name) {
 		if (!(this instanceof Model)) {
@@ -142,7 +160,7 @@
 		if (typeof ref === 'undefined') {
 			ref = this.__name__ + '_id';
 		}
-		var define = exports.datum.getDefined(name),
+		var define = libAPI.datum.getDefined(name),
 		lists = [];
 		for (var i = num - 1, model; i >= 0; i--) {
 			model = new Model(name);
@@ -154,7 +172,7 @@
 	};
 
 	function setAssociation(obj, name) {
-		var define = exports.datum.getDefined(name);
+		var define = libAPI.datum.getDefined(name);
 		var model = new Model(name);
 		define.call(model);
 		obj[name] = model;
@@ -164,18 +182,19 @@
 
 	function configModel(obj) {
 		var name = obj.getName(),
-		opts = exports.datum.getOptions(name);
+		opts = libAPI.datum.getOptions(name);
 		if (opts.inherit) {
-			var define = exports.datum.getDefined(opts.inherit),
+			var define = libAPI.datum.getDefined(opts.inherit),
 			model = new Model(opts.inherit);
 			define.call(obj);
-			exports.utils.merge(obj, model, true);
+			libAPI.utils.merge(obj, model, true);
 		}
 	};
-})(exports = (typeof exports === 'undefined' ? {} : exports), global);
+})(libAPI = (typeof libAPI === 'undefined' ? {} : libAPI), global);
 
-(function(FactoryGirl, exports, global) {
-	exports.version = {
+;(function(FactoryGirl, libAPI, global) {
+
+libAPI.version = {
 		full: '0.1.0',
 		major: 0,
 		minor: 1,
@@ -183,53 +202,60 @@
 		codeName: 'black'
 	};
 
-	exports.define = function(name) {
+	libAPI.define = function(name) {
 		var callback = arguments[arguments.length - 1],
 		opts = arguments.length === 3 ? arguments[1] : {};
 		if (typeof callback === 'function') {
-			exports.datum.setDefined(name, opts, callback);
+			libAPI.datum.setDefined(name, opts, callback);
 		} else {
 			throw Error('argument must be a function')
 		}
 	};
 
-	exports.defined = function(name) {
-		try { exports.datum.checkDefined() }
+	libAPI.defined = function(name) {
+		try { libAPI.datum.checkDefined() }
 		catch(e) { return false }
 		return true;
 	};
 
-	exports.create = function(name) {
-		return exports.datum.createFactory(name);
+	libAPI.create = function(name) {
+		return libAPI.datum.createFactory(name);
 	};
 
-	exports.createLists = function(name, num) {
+	libAPI.createLists = function(name, num) {
 		var lists = [];
 		while(num--) {
-			lists.push(exports.datum.createFactory(name));
+			lists.push(libAPI.datum.createFactory(name));
 		}
 		return lists;
 	};
 
-	exports.attributesFor = function(name) {
-		var define = exports.datum.getDefined(name),
-		model = new exports.Model(name);
+	libAPI.attributesFor = function(name) {
+		var define = libAPI.datum.getDefined(name),
+		model = new libAPI.Model(name);
 		define.call(model);
 		return model.attributes();
 	};
 
-	FactoryGirl.version = exports.version;
-	FactoryGirl.define = exports.define;
-	FactoryGirl.defined = exports.defined;
-	FactoryGirl.create = exports.create;
-	FactoryGirl.createLists = exports.createLists;
-	FactoryGirl.attributesFor = exports.attributesFor;
+	libAPI.clear = function(name) {
+		if (name) {
+			libAPI.datum.remove(name);
+		} else {
+			libAPI.datum.clear();
+		}
+	};
+
+	FactoryGirl.version = libAPI.version;
+	FactoryGirl.define = libAPI.define;
+	FactoryGirl.defined = libAPI.defined;
+	FactoryGirl.create = libAPI.create;
+	FactoryGirl.createLists = libAPI.createLists;
+	FactoryGirl.attributesFor = libAPI.attributesFor;
+	FactoryGirl.clear = libAPI.clear;
 })(
 	FactoryGirl = (typeof FactoryGirl === 'undefined' ? {} : FactoryGirl),
-	exports = (typeof exports === 'undefined' ? {} : exports),
+	libAPI = (typeof libAPI === 'undefined' ? {} : libAPI),
 	global
 );
-
-
 
 })(FactoryGirl = ('undefined' === typeof module ? {} : module.exports), {}, this);

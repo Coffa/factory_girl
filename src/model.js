@@ -1,7 +1,7 @@
-'use strict';
+;(function(libAPI, global) {
+	'use strict';
 
-(function(exports, global) {
-	exports.Model = Model;
+	libAPI.Model = Model;
 
 	function Model(name) {
 		if (!(this instanceof Model)) {
@@ -70,7 +70,7 @@
 		if (typeof ref === 'undefined') {
 			ref = this.__name__ + '_id';
 		}
-		var define = exports.datum.getDefined(name),
+		var define = libAPI.datum.getDefined(name),
 		lists = [];
 		for (var i = num - 1, model; i >= 0; i--) {
 			model = new Model(name);
@@ -82,7 +82,7 @@
 	};
 
 	function setAssociation(obj, name) {
-		var define = exports.datum.getDefined(name);
+		var define = libAPI.datum.getDefined(name);
 		var model = new Model(name);
 		define.call(model);
 		obj[name] = model;
@@ -92,12 +92,12 @@
 
 	function configModel(obj) {
 		var name = obj.getName(),
-		opts = exports.datum.getOptions(name);
+		opts = libAPI.datum.getOptions(name);
 		if (opts.inherit) {
-			var define = exports.datum.getDefined(opts.inherit),
+			var define = libAPI.datum.getDefined(opts.inherit),
 			model = new Model(opts.inherit);
 			define.call(obj);
-			exports.utils.merge(obj, model, true);
+			libAPI.utils.merge(obj, model, true);
 		}
 	};
-})(exports = (typeof exports === 'undefined' ? {} : exports), global);
+})(libAPI = (typeof libAPI === 'undefined' ? {} : libAPI), global);
