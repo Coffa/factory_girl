@@ -1,9 +1,9 @@
 ;(function(libAPI, global) {
 	'use strict';
 
-	libAPI.datum = new Data();
-
 	var container = {};
+
+	libAPI.datum = new Data();
 
 	function Data() {};
 
@@ -53,13 +53,16 @@
 	Data.prototype.remove = function(name) {
 		this.checkDefined(name);
 		delete container[name];
+		return this;
 	};
 
 	Data.prototype.clear = function() {
+		var prop;
 		for(prop in container) {
 			if (container.hasOwnProperty(prop)) {
 				this.remove(prop);
 			}
 		}
+		return this;
 	};
 })(libAPI = (typeof libAPI === 'undefined' ? {} : libAPI), global);

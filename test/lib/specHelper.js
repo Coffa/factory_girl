@@ -1,5 +1,7 @@
 defineFactoryGirl = function(){
-  before(function() {
+  beforeEach(function() {
+    FactoryGirl.clear();
+
   	FactoryGirl.define('user', {alias: 'account'}, function() {
   		this.id = 1;
   		this.name = 'Minh Quy';
@@ -29,3 +31,13 @@ defineFactoryGirl = function(){
   	})
   })
 };
+
+createNewFactory = function(opts, define) {
+  beforeEach(function() {
+    libAPI.datum.setDefined('mquy', opts, define);
+  })
+
+  afterEach(function() {
+    libAPI.datum.remove('mquy');
+  })
+}

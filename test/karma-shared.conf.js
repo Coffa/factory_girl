@@ -16,6 +16,7 @@ module.exports = function(config) {
     files: [
       'src/*.js',
       'node_modules/chai/chai.js',
+      'node_modules/sinon/pkg/sinon.js',
       'test/mocha.conf.js',
       {pattern: 'test/lib/*.js', included: true}
     ],
@@ -40,7 +41,7 @@ module.exports = function(config) {
     },
 
     // web server port
-    port: 9875,
+    port: 9876,
 
     // enable / disable colors in the output (reporters and logs)
     colors: true,
