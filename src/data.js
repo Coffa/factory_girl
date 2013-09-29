@@ -44,9 +44,8 @@
 
 	Data.prototype.createFactory = function(name) {
 		var define = this.getDefined(name),
-		factory = new libAPI.Model(name);
+				factory = new libAPI.Model(name);
 		container[name]['factories'].push(factory);
-		define.call(factory);
 		return factory;
 	};
 

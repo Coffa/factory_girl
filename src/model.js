@@ -21,7 +21,7 @@
 
 	Model.prototype.toJSON = function(excludeChild, objPrinted) {
 		var keys = Object.keys(this),
-		attrs = {};
+				attrs = {};
 		if (typeof objPrinted === 'undefined' || !(objPrinted instanceof Array)) {
 			objPrinted = [];
 		}
@@ -60,7 +60,7 @@
 
 	Model.prototype.hasOne = function(name, ref) {
 		if (typeof ref === 'undefined') {
-			ref = this.__name__ + '_id';
+			ref = this.getName() + '_id';
 		}
 		var model = setAssociation(this, name);
 		model[ref] = this.id;
@@ -68,13 +68,11 @@
 
 	Model.prototype.hasMany = function(name, num, ref) {
 		if (typeof ref === 'undefined') {
-			ref = this.__name__ + '_id';
+			ref = this.getName() + '_id';
 		}
-		var define = libAPI.datum.getDefined(name),
-		lists = [];
+		var lists = [];
 		for (var i = num - 1, model; i >= 0; i--) {
 			model = new Model(name);
-			define.call(model);
 			model[ref] = this.id;
 			lists.push(model);
 		};
@@ -82,22 +80,44 @@
 	};
 
 	function setAssociation(obj, name) {
-		var define = libAPI.datum.getDefined(name);
 		var model = new Model(name);
-		define.call(model);
 		obj[name] = model;
-		model[obj.__name__] = obj;
+		model[obj.getName()] = obj;
 		return model;
 	};
 
 	function configModel(obj) {
 		var name = obj.getName(),
-		opts = libAPI.datum.getOptions(name);
-		if (opts.inherit) {
-			var define = libAPI.datum.getDefined(opts.inherit),
-			model = new Model(opts.inherit);
-			define.call(obj);
-			libAPI.utils.merge(obj, model, true);
-		}
+				opts = libAPI.datum.getOptions(name),
+				define = libAPI.datum.getDefined(name);
+
+		define.call(obj);
+		setInherit(obj, opts.inherit);
 	};
+
+	function setInherit(obj, inherit) {
+		if (!!!inherit) return;
+
+		var inheritDefine = libAPI.datum.getDefined(inherit),
+				model = new Model(inherit);
+		inheritDefine.call(model);
+		libAPI.utils.merge(obj, model, true);
+
+		var keys = Object.keys(obj);
+		for (var i = keys.length - 1, key, property; i >= 0; i--) {
+			key = keys[i];
+			property = obj[key];
+			if (property instanceof Array) {
+				property.forEach(function(iterate) {
+					if (iterate instanceof Model && iterate[model.getName() + '_id']) {
+						delete iterate[model.getName() + '_id'];
+						iterate[obj.getName() + '_id'] = obj.id;
+					}
+				})
+			} else if (property instanceof Model && iterate[model.getName() + '_id']) {
+				delete property[model.getName() + '_id'];
+				property[obj.getName() + '_id'] = obj.id;
+			}
+		};
+	}
 })(libAPI = (typeof libAPI === 'undefined' ? {} : libAPI), global);

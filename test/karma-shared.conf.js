@@ -40,8 +40,8 @@ module.exports = function(config) {
         suite: ''
     },
 
-    // web server port
-    port: 9876,
+    // web server port, need to change if got error
+    port: 9872,
 
     // enable / disable colors in the output (reporters and logs)
     colors: true,

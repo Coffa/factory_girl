@@ -22,7 +22,7 @@ defineFactoryGirl = function(){
   	FactoryGirl.define('place', function() {
   		this.id = 4;
   		this.name = 'Earth';
-  		this.hasMany('user');
+  		this.hasMany('user', 2);
   	})
 
   	FactoryGirl.define('plateau', {inherit: 'place'}, function() {

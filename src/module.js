@@ -20,7 +20,7 @@
 	};
 
 	libAPI.defined = function(name) {
-		try { libAPI.datum.checkDefined() }
+		try { libAPI.datum.checkDefined(name) }
 		catch(e) { return false }
 		return true;
 	};
@@ -38,9 +38,7 @@
 	};
 
 	libAPI.attributesFor = function(name) {
-		var define = libAPI.datum.getDefined(name),
-		model = new libAPI.Model(name);
-		define.call(model);
+		var model = new libAPI.Model(name);
 		return model.attributes();
 	};
 
