@@ -79,6 +79,10 @@
 		this[name] = lists;
 	};
 
+	Model.prototype.sequence = function(seq_name, attr_name) {
+		this[attr_name] = libAPI.datum.nextSequence(seq_name);
+	};
+
 	function setAssociation(obj, name) {
 		var model = new Model(name);
 		obj[name] = model;

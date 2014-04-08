@@ -2,6 +2,7 @@
 	'use strict';
 
 	var container = {};
+	var sequences = {};
 
 	libAPI.datum = new Data();
 
@@ -63,5 +64,15 @@
 			}
 		}
 		return this;
+	};
+
+	Data.prototype.setSequence = function(name, callback) {
+		sequences[name] = {constructor: callback, next_id: 0};
+	};
+
+	Data.prototype.nextSequence = function(name) {
+		console.log(sequences[name]);
+		sequences[name]['next_id'] += 1;
+		return sequences[name]['constructor'](sequences[name]['next_id']);
 	};
 })(libAPI = (typeof libAPI === 'undefined' ? {} : libAPI), global);

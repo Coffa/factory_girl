@@ -1,2 +1,4 @@
 /node_modules
 test-results.xml
+coverage/*
+build/*

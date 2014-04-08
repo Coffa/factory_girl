@@ -1,5 +1,5 @@
 describe('Model', function () {
-	var user, visa, profile, place, plateau;
+	var user, visa, profile, another_profile, place, plateau;
 
 	defineFactoryGirl();
 
@@ -7,6 +7,7 @@ describe('Model', function () {
 		user = libAPI.datum.createFactory('user');
 		visa = libAPI.datum.createFactory('visa');
 		profile = libAPI.datum.createFactory('profile');
+		another_profile = libAPI.datum.createFactory('profile');
 		place = libAPI.datum.createFactory('place');
 		plateau = libAPI.datum.createFactory('plateau');
 	})
@@ -48,19 +49,31 @@ describe('Model', function () {
 					id: 1,
 					name: 'Minh Quy'
 				}
-			})
+			});
 		});
 
 		it('profile should have json with ... results', function () {
 			expect(profile.toJSON()).to.eql({
-				id: 2,
+				id: 'id_1',
 				emotion: 'Happy',
 				user_id: 1,
 				user: {
 					id: 1,
 					name: 'Minh Quy'
 				}
-			})
+			});
+		});
+
+		it('another profile should have json with ... results', function () {
+			expect(another_profile.toJSON()).to.eql({
+				id: 'id_2',
+				emotion: 'Happy',
+				user_id: 1,
+				user: {
+					id: 1,
+					name: 'Minh Quy'
+				}
+			});
 		});
 
 		it('place should have json with ... results', function () {
@@ -70,7 +83,7 @@ describe('Model', function () {
 					{id: 1, place_id: 4, name: 'Minh Quy'},
 					{id: 1, place_id: 4, name: 'Minh Quy'}
 				]
-			})
+			});
 		});
 
 		it('plateau should have json with ... results', function () {

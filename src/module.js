@@ -50,6 +50,14 @@
 		}
 	};
 
+	libAPI.sequence = function(name, callback) {
+		if (typeof callback === 'function') {
+			libAPI.datum.setSequence(name, callback);
+		} else {
+			throw Error('argument must be a function');
+		}
+	};
+
 	FactoryGirl.version = libAPI.version;
 	FactoryGirl.define = libAPI.define;
 	FactoryGirl.defined = libAPI.defined;
@@ -57,6 +65,7 @@
 	FactoryGirl.createLists = libAPI.createLists;
 	FactoryGirl.attributesFor = libAPI.attributesFor;
 	FactoryGirl.clear = libAPI.clear;
+	FactoryGirl.sequence = libAPI.sequence;
 })(
 	FactoryGirl = (typeof FactoryGirl === 'undefined' ? {} : FactoryGirl),
 	libAPI = (typeof libAPI === 'undefined' ? {} : libAPI),
