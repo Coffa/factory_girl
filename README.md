@@ -90,3 +90,21 @@ profile.toJSON() // => {id: 2, label: 'New York', user: {id: 1, place_id: 2, ...
 ``` js
 FactoryGirl.createLists('user') => [{id: 1, ...}, {id: 23, ....}]
 ```
+
+### Sequences
+
+``` js
+FactoryGirl.sequence('seq_name', function(id) {
+	return 'name ' + id;
+});
+
+FactoryGirl.define('user', function () {
+	this.sequence('seq_name', 'name');
+})
+
+var user = FactoryGirl.create('user');
+user.toJSON() // => {name: 'name 1'}
+
+var user2 = FactoryGirl.create('user');
+user2.toJSON() // => {name: 'name 2'}
+```
