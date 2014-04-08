@@ -96,7 +96,6 @@ var container = {};
 	};
 
 	Data.prototype.nextSequence = function(name) {
-		console.log(sequences[name]);
 		sequences[name]['next_id'] += 1;
 		return sequences[name]['constructor'](sequences[name]['next_id']);
 	};
