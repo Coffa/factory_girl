@@ -2,6 +2,10 @@ defineFactoryGirl = function(){
   beforeEach(function() {
     FactoryGirl.clear();
 
+    FactoryGirl.sequence('s_id', function(i) {
+      return 'id_' + i;
+    });
+
   	FactoryGirl.define('user', {alias: 'account'}, function() {
   		this.id = 1;
   		this.name = 'Minh Quy';
@@ -14,7 +18,7 @@ defineFactoryGirl = function(){
   	})
 
   	FactoryGirl.define('profile', function() {
-  		this.id = 2;
+  		this.sequence('s_id', 'id');
   		this.emotion = 'Happy';
   		this.belongTo('user');
   	})

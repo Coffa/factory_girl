@@ -27,6 +27,7 @@ libAPI.utils = {};
 ;(function(libAPI, global) {
 
 var container = {};
+	var sequences = {};
 
 	libAPI.datum = new Data();
 
@@ -88,6 +89,15 @@ var container = {};
 			}
 		}
 		return this;
+	};
+
+	Data.prototype.setSequence = function(name, callback) {
+		sequences[name] = {constructor: callback, next_id: 0};
+	};
+
+	Data.prototype.nextSequence = function(name) {
+		sequences[name]['next_id'] += 1;
+		return sequences[name]['constructor'](sequences[name]['next_id']);
 	};
 })(libAPI = (typeof libAPI === 'undefined' ? {} : libAPI), global);
 
@@ -169,6 +179,10 @@ libAPI.Model = Model;
 			lists.push(model);
 		};
 		this[name] = lists;
+	};
+
+	Model.prototype.sequence = function(seq_name, attr_name) {
+		this[attr_name] = libAPI.datum.nextSequence(seq_name);
 	};
 
 	function setAssociation(obj, name) {
@@ -265,6 +279,14 @@ libAPI.version = {
 		}
 	};
 
+	libAPI.sequence = function(name, callback) {
+		if (typeof callback === 'function') {
+			libAPI.datum.setSequence(name, callback);
+		} else {
+			throw Error('argument must be a function');
+		}
+	};
+
 	FactoryGirl.version = libAPI.version;
 	FactoryGirl.define = libAPI.define;
 	FactoryGirl.defined = libAPI.defined;
@@ -272,6 +294,7 @@ libAPI.version = {
 	FactoryGirl.createLists = libAPI.createLists;
 	FactoryGirl.attributesFor = libAPI.attributesFor;
 	FactoryGirl.clear = libAPI.clear;
+	FactoryGirl.sequence = libAPI.sequence;
 })(
 	FactoryGirl = (typeof FactoryGirl === 'undefined' ? {} : FactoryGirl),
 	libAPI = (typeof libAPI === 'undefined' ? {} : libAPI),
