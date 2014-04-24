@@ -12,7 +12,7 @@
 		if (!!container[name]) {
 			return true;
 		} else {
-			throw Error(name + ' is not exist');
+			throw Error(name + ' is not defined');
 		}
 	};
 
