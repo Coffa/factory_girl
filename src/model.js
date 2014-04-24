@@ -66,13 +66,19 @@
 		model[ref] = this.id;
 	};
 
-	Model.prototype.hasMany = function(name, num, ref) {
+	Model.prototype.hasMany = function(name, modelName, num, ref) {
+    if (typeof modelName === 'number') {
+      num = modelName;
+      ref = num;
+      modelName = name;
+    }
+
 		if (typeof ref === 'undefined') {
 			ref = this.getName() + '_id';
 		}
 		var lists = [];
 		for (var i = num - 1, model; i >= 0; i--) {
-			model = new Model(name);
+			model = new Model(modelName);
 			model[ref] = this.id;
 			lists.push(model);
 		};
