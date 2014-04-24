@@ -88,14 +88,19 @@
 
 	Model.prototype.hasMany = function(name, modelName, num, ref) {
     if (typeof modelName === 'number') {
-      num = modelName;
       ref = num;
+      num = modelName;
+      modelName = null;
+    }
+
+		if (!ref) {
+			ref = this.getName() + '_id';
+		}
+
+    if (!modelName) {
       modelName = name;
     }
 
-		if (typeof ref === 'undefined') {
-			ref = this.getName() + '_id';
-		}
 		var lists = [];
 		for (var i = num - 1, model; i >= 0; i--) {
 			model = new Model(modelName);
