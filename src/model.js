@@ -50,19 +50,39 @@
 		return attrs;
 	};
 
-	Model.prototype.belongTo = function(name, ref) {
+	Model.prototype.belongTo = function(name, modelName, ref) {
 		if (typeof ref === 'undefined') {
-			ref = name + '_id';
+      ref = modelName;
+      modelName = name;
+
 		}
-		var model = setAssociation(this, name);
+
+    if (!modelName) {
+      modelName = name;
+    }
+
+    if (!ref) {
+      ref = modelName + '_id';
+    }
+		var model = setAssociation(this, name, modelName);
 		this[ref] = model.id;
 	};
 
-	Model.prototype.hasOne = function(name, ref) {
+	Model.prototype.hasOne = function(name, modelName, ref) {
 		if (typeof ref === 'undefined') {
-			ref = this.getName() + '_id';
+      ref = modelName;
+      modelName = name;
 		}
-		var model = setAssociation(this, name);
+
+    if (!modelName) {
+      modelName = name;
+    }
+
+    if (!ref) {
+      ref = this.getName() + '_id';
+    }
+
+		var model = setAssociation(this, name, modelName);
 		model[ref] = this.id;
 	};
 
@@ -89,8 +109,8 @@
 		this[attr_name] = libAPI.datum.nextSequence(seq_name);
 	};
 
-	function setAssociation(obj, name) {
-		var model = new Model(name);
+	function setAssociation(obj, name, modelName) {
+		var model = new Model(modelName);
 		obj[name] = model;
 		model[obj.getName()] = obj;
 		return model;
