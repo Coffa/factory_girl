@@ -37,7 +37,7 @@ var container = {};
 		if (!!container[name]) {
 			return true;
 		} else {
-			throw Error(name + ' is not exist');
+			throw Error(name + ' is not defined');
 		}
 	};
 
@@ -287,6 +287,24 @@ libAPI.version = {
 		}
 	};
 
+  libAPI.findDefinitions = function() {
+    if (!(this.definitionFilePaths instanceof Array)) {
+      throw Error('FactoryGirl.definitionFilePaths must be an array');
+    }
+
+    if ('undefined' === typeof require) {
+      throw Error('FactoryGirl.findDefinitions is not available on browser');
+    }
+
+    var fs = require('fs');
+    var path = require('path');
+    this.definitionFilePaths.forEach(function(defintionPath) {
+      fs.readdirSync(defintionPath).forEach(function(file) {
+        require(path.join(defintionPath, file));
+      });
+    });
+  }
+
 	FactoryGirl.version = libAPI.version;
 	FactoryGirl.define = libAPI.define;
 	FactoryGirl.defined = libAPI.defined;
@@ -295,6 +313,7 @@ libAPI.version = {
 	FactoryGirl.attributesFor = libAPI.attributesFor;
 	FactoryGirl.clear = libAPI.clear;
 	FactoryGirl.sequence = libAPI.sequence;
+	FactoryGirl.findDefinitions = libAPI.findDefinitions;
 })(
 	FactoryGirl = (typeof FactoryGirl === 'undefined' ? {} : FactoryGirl),
 	libAPI = (typeof libAPI === 'undefined' ? {} : libAPI),
