@@ -40,6 +40,15 @@ It's possible to override the defined attributes by passing a json:
 	FactoryGirl.defined('user') // => true
 ```
 
+### Loading factories
+
+When using node.js you can specify the path(s) to your factories, so FactoryGirl will autoload all factories in that paths
+```js
+  FactoryGirl.definitionFilePaths = [__dirname + '/factories'];
+  FactoryGirl.findDefinitions();
+```
+_* The path to the factories must be an `Array` and also must be relative to the current file_
+
 ### Aliases
 
 ``` js
