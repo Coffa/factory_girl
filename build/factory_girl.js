@@ -96,7 +96,6 @@ var container = {};
 	};
 
 	Data.prototype.nextSequence = function(name) {
-		console.log(sequences[name]);
 		sequences[name]['next_id'] += 1;
 		return sequences[name]['constructor'](sequences[name]['next_id']);
 	};
@@ -289,6 +288,10 @@ libAPI.version = {
 	};
 
   libAPI.findDefinitions = function() {
+    if (!(this.definitionFilePaths instanceof Array)) {
+      throw Error('FactoryGirl.definitionFilePaths must be an array');
+    }
+
     if ('undefined' === typeof require) {
       throw Error('FactoryGirl.findDefinitions is not available on browser');
     }
