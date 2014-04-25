@@ -59,7 +59,7 @@
 	};
 
   libAPI.findDefinitions = function() {
-    if (!(this.definitionFilePaths instanceof Array)) {
+    if (!(FactoryGirl.definitionFilePaths instanceof Array)) {
       throw Error('FactoryGirl.definitionFilePaths must be an array');
     }
 
@@ -69,7 +69,7 @@
 
     var fs = require('fs');
     var path = require('path');
-    this.definitionFilePaths.forEach(function(defintionPath) {
+    FactoryGirl.definitionFilePaths.forEach(function(defintionPath) {
       fs.readdirSync(defintionPath).forEach(function(file) {
         require(path.join(defintionPath, file));
       });
