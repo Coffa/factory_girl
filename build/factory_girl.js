@@ -152,29 +152,60 @@ libAPI.Model = Model;
 		return attrs;
 	};
 
-	Model.prototype.belongTo = function(name, ref) {
+	Model.prototype.belongTo = function(name, modelName, ref) {
 		if (typeof ref === 'undefined') {
-			ref = name + '_id';
+      ref = modelName;
+      modelName = name;
+
 		}
-		var model = setAssociation(this, name);
+
+    if (!modelName) {
+      modelName = name;
+    }
+
+    if (!ref) {
+      ref = modelName + '_id';
+    }
+		var model = setAssociation(this, name, modelName);
 		this[ref] = model.id;
 	};
 
-	Model.prototype.hasOne = function(name, ref) {
+	Model.prototype.hasOne = function(name, modelName, ref) {
 		if (typeof ref === 'undefined') {
-			ref = this.getName() + '_id';
+      ref = modelName;
+      modelName = name;
 		}
-		var model = setAssociation(this, name);
+
+    if (!modelName) {
+      modelName = name;
+    }
+
+    if (!ref) {
+      ref = this.getName() + '_id';
+    }
+
+		var model = setAssociation(this, name, modelName);
 		model[ref] = this.id;
 	};
 
-	Model.prototype.hasMany = function(name, num, ref) {
-		if (typeof ref === 'undefined') {
+	Model.prototype.hasMany = function(name, modelName, num, ref) {
+    if (typeof modelName === 'number') {
+      ref = num;
+      num = modelName;
+      modelName = null;
+    }
+
+		if (!ref) {
 			ref = this.getName() + '_id';
 		}
+
+    if (!modelName) {
+      modelName = name;
+    }
+
 		var lists = [];
 		for (var i = num - 1, model; i >= 0; i--) {
-			model = new Model(name);
+			model = new Model(modelName);
 			model[ref] = this.id;
 			lists.push(model);
 		};
@@ -185,8 +216,8 @@ libAPI.Model = Model;
 		this[attr_name] = libAPI.datum.nextSequence(seq_name);
 	};
 
-	function setAssociation(obj, name) {
-		var model = new Model(name);
+	function setAssociation(obj, name, modelName) {
+		var model = new Model(modelName);
 		obj[name] = model;
 		model[obj.getName()] = obj;
 		return model;
@@ -288,7 +319,7 @@ libAPI.version = {
 	};
 
   libAPI.findDefinitions = function() {
-    if (!(this.definitionFilePaths instanceof Array)) {
+    if (!(FactoryGirl.definitionFilePaths instanceof Array)) {
       throw Error('FactoryGirl.definitionFilePaths must be an array');
     }
 
@@ -298,7 +329,7 @@ libAPI.version = {
 
     var fs = require('fs');
     var path = require('path');
-    this.definitionFilePaths.forEach(function(defintionPath) {
+    FactoryGirl.definitionFilePaths.forEach(function(defintionPath) {
       fs.readdirSync(defintionPath).forEach(function(file) {
         require(path.join(defintionPath, file));
       });

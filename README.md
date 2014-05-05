@@ -74,7 +74,21 @@ doctor.attributes() // => {id: 2, title: 'That\'s awesome day', emotion: 'happy'
 ```
 
 ### Association
+
 ``` js
+FactoryGirl.hasOne(name[, factoryName] [, ref])
+FactoryGirl.belongsTo(name[, factoryName] [, ref])
+FactoryGirl.hasMany(name[, factoryName], num[, ref])
+```
+
+`name`: Factory's property name
+`factoryName`: Definition name of the related factory
+`num`: Number of related factories to be created
+`ref`: Foreign key attribute name
+
+#### Examples
+
+```js
 FactoryGirl.define('profile', function() {
 	this.id = 2;
 	this.label = 'Dr';
@@ -85,6 +99,11 @@ FactoryGirl.define('place', function() {
 	this.id = 2;
 	this.label = 'New York';
 	this.hasOne('user');
+})
+
+FactoryGirl.define('user', function() {
+  this.name = 'John';
+  this.hasMany('places', 'place');
 })
 
 var profile = FactoryGirl.create('profile');
