@@ -26,22 +26,18 @@ defineFactoryGirl = function(){
   	FactoryGirl.define('place', function() {
   		this.id = 4;
   		this.name = 'Earth';
-  		this.hasMany('user', 2);
+  		this.hasMany('users', 'user', 2);
   	})
 
   	FactoryGirl.define('plateau', {inherit: 'place'}, function() {
   		this.id = 5;
   		this.type = 'plateau';
   	})
-  })
+  });
 };
 
 createNewFactory = function(opts, define) {
   beforeEach(function() {
     libAPI.datum.setDefined('mquy', opts, define);
-  })
-
-  afterEach(function() {
-    libAPI.datum.remove('mquy');
   })
 }

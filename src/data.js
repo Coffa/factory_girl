@@ -9,7 +9,7 @@
   function Data() {}
 
   Data.prototype.checkDefined = function(name) {
-    if (!!container[name]) {
+    if (container[name]) {
       return true;
     } else {
       throw Error(name + ' is not defined');
@@ -63,6 +63,10 @@
       }
     }
     return this;
+  };
+
+  Data.prototype.count = function() {
+    return Object.keys(container).length;
   };
 
   Data.prototype.setSequence = function(name, callback) {

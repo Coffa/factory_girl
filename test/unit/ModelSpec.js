@@ -17,28 +17,28 @@ describe('Model', function () {
 	});
 
 	describe('#getName()', function () {
-		it('has mquy\'s name', function () {
+
+		it('has factory user\'s name', function () {
 			expect(user.getName()).to.equal('user');
 		});
 	});
 
 	describe('#attributes()', function () {
+
 		it('user should have ... attributes', function () {
 			expect(user.attributes()).to.eql({id: 1, name: 'Minh Quy'});
 		});
 
-		it('visa should have ... attributes', function () {
+		it('place should have ... attributes', function () {
+			expect(place.attributes()).to.eql({id: 4, name: 'Earth'})
+		});
+
+		it('plateau should have ... attributes', function () {
 			expect(plateau.attributes()).to.eql({id: 5, name: 'Earth', type: 'plateau'});
 		});
 	});
 
 	describe('#toJSON()', function () {
-		it('user should have json with ... results', function () {
-			expect(user.toJSON()).to.eql({
-				id: 1,
-				name: 'Minh Quy'
-			});
-		});
 
 		it('visa should have json with ... results ', function () {
 			expect(visa.toJSON()).to.eql({
@@ -79,7 +79,7 @@ describe('Model', function () {
 		it('place should have json with ... results', function () {
 			expect(place.toJSON()).to.eql({
 				id: 4, name: 'Earth',
-				user: [
+				users: [
 					{id: 1, place_id: 4, name: 'Minh Quy'},
 					{id: 1, place_id: 4, name: 'Minh Quy'}
 				]
@@ -91,7 +91,7 @@ describe('Model', function () {
 				id: 5,
 				type: 'plateau',
 				name: 'Earth',
-				user: [
+				users: [
 					{id: 1, plateau_id: 5, name: 'Minh Quy'},
 					{id: 1, plateau_id: 5, name: 'Minh Quy'}
 				]
@@ -101,17 +101,21 @@ describe('Model', function () {
 
 	describe('#belongTo()', function () {
 		it('profile belong to user', function () {
-			expect(profile.user).to.exist;
+			expect(profile.user).to.instanceof(libAPI.Model);
 		});
 
 		it('profile contains user_id', function () {
 			expect(profile.user_id).to.equal(user.id);
 		});
+
+		it('mquy use users instead of user', function() {
+			FactoryGirl.define('demo', function() {})
+		})
 	});
 
 	describe('#hasOne()', function () {
 		it('visa has user', function () {
-			expect(visa.user).to.exist;
+			expect(visa.user).to.instanceof(libAPI.Model);
 		});
 
 		it('user contains visa_id', function () {
@@ -121,11 +125,26 @@ describe('Model', function () {
 
 	describe('#hasMany()', function () {
 		it('place has two user', function () {
-			expect(place.user).to.have.length(2)
+			expect(place.users).to.have.length(2)
+		});
+
+		it('each user is instanceof user factory', function() {
+			expect(function() {
+				place.users.forEach(function(iterator) {
+					if (iterator instanceof libAPI.Model) return;
+					throw Error();
+				})
+			}).to.not.throw();
 		});
 
 		it('user has place id', function () {
-			expect(place.user[0].place_id).to.equal(place.id)
+			expect(place.users[0].place_id).to.equal(place.id)
 		});
 	});
+
+	describe('#sequence()', function() {
+		it('should has id equal 2', function() {
+			expect(another_profile.id).to.equal('id_2')
+		});
+	})
 });

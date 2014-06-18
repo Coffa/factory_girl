@@ -33,7 +33,7 @@ var container = {};
   function Data() {}
 
   Data.prototype.checkDefined = function(name) {
-    if (!!container[name]) {
+    if (container[name]) {
       return true;
     } else {
       throw Error(name + ' is not defined');
@@ -87,6 +87,10 @@ var container = {};
       }
     }
     return this;
+  };
+
+  Data.prototype.count = function() {
+    return Object.keys(container).length;
   };
 
   Data.prototype.setSequence = function(name, callback) {
@@ -150,55 +154,26 @@ libAPI.Model = Model;
     return attrs;
   };
 
-  Model.prototype.belongTo = function(name, modelName, ref) {
-    if (typeof ref === 'undefined') {
-      ref = modelName;
-      modelName = name;
-
-    }
-    if (!modelName) {
-      modelName = name;
-    }
-    if (!ref) {
-      ref = modelName + '_id';
-    }
-
-    var model = setAssociation(this, name, modelName);
-    this[ref] = model.id;
+  Model.prototype.belongTo = function(name, factoryName, ref) {
+    return setAssociation(this, name, factoryName, ref, true);
   };
 
-  Model.prototype.hasOne = function(name, modelName, ref) {
-    if (typeof ref === 'undefined') {
-      ref = modelName;
-      modelName = name;
-    }
-    if (!modelName) {
-      modelName = name;
-    }
-    if (!ref) {
-      ref = this.getName() + '_id';
-    }
-
-    var model = setAssociation(this, name, modelName);
-    model[ref] = this.id;
+  Model.prototype.hasOne = function(name, factoryName, ref) {
+    return setAssociation(this, name, factoryName, ref, false);
   };
 
-  Model.prototype.hasMany = function(name, modelName, num, ref) {
-    if (typeof modelName === 'number') {
+  Model.prototype.hasMany = function(name, factoryName, num, ref) {
+    if (typeof factoryName === 'number') {
       ref = num;
-      num = modelName;
-      modelName = null;
+      num = factoryName;
+      factoryName = null;
     }
-    if (!ref) {
-      ref = this.getName() + '_id';
-    }
-    if (!modelName) {
-      modelName = name;
-    }
+    factoryName = factoryName || name;
+    ref = ref || this.getName() + '_id';
 
     var lists = [];
     for (var i = num - 1, model; i >= 0; i--) {
-      model = new Model(modelName);
+      model = new Model(factoryName);
       model[ref] = this.id;
       lists.push(model);
     }
@@ -211,11 +186,18 @@ libAPI.Model = Model;
 
   return;
 
-  function setAssociation(obj, name, modelName) {
-    var model = new Model(modelName);
+  function setAssociation(obj, name, factoryName, ref, flag) {
+    var model;
 
+    if (!ref) {
+      ref = factoryName;
+      factoryName = name;
+    }
+    ref = ref || (flag ? factoryName : obj.getName()) + '_id';
+    model = new Model(factoryName);
     obj[name] = model;
     model[obj.getName()] = obj;
+    flag ? obj[ref] = model.id : model[ref] = obj.id;
     return model;
   }
 

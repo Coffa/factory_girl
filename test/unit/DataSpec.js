@@ -2,15 +2,12 @@ describe('Data', function () {
 	defineFactoryGirl();
 
 	it('datum should be defined', function () {
-		expect(libAPI.datum).to.exist
+		expect(libAPI.datum).to.exist;
 	});
 
 	describe('#checkDefined()', function () {
-		it('should be defined', function () {
-			expect(libAPI.datum.checkDefined).to.be.a('function');
-		});
 
-		it('should contain all defined', function () {
+		it('should contain user, account, visa, ... defined', function () {
 			(function() {
 				libAPI.datum.checkDefined('user');
 				libAPI.datum.checkDefined('account');
@@ -48,7 +45,6 @@ describe('Data', function () {
 				libAPI.datum.checkDefined('mquy');
 				libAPI.datum.checkDefined('luffy');
 			}).should.not.throw();
-			libAPI.datum.remove('mquy').remove('luffy');
 		});
 
 		it('alias is string in opts', function () {
@@ -56,7 +52,6 @@ describe('Data', function () {
 			(function() {
 				libAPI.datum.checkDefined('mquy');
 			}).should.not.throw();
-			libAPI.datum.remove('mquy');
 		});
 	});
 
@@ -93,19 +88,18 @@ describe('Data', function () {
 	});
 
 	describe('#remove()', function () {
-		createNewFactory({});
-
-		it('remove correctly', function () {
-			expect('everything').to.be.ok;
+		it('mquy should not exist', function () {
+			libAPI.datum.remove('user');
+			(function() {
+				libAPI.datum.checkDefined('user');
+			}).should.throw();
 		});
 	});
 
 	describe('#clear()', function () {
-		it('description', function () {
+		it('should not contain any factories', function () {
 			libAPI.clear();
-			(function() {
-				libAPI.datum.getDefined('user');
-			}).should.throw();
+			expect(libAPI.datum.count()).to.equal(0);
 		});
 	});
 });
