@@ -43,8 +43,8 @@
     return container[name]['defined'];
   };
 
-  Data.prototype.createFactory = function(name) {
-    var factory = new libAPI.Model(name);
+  Data.prototype.createFactory = function(name, attrs) {
+    var factory = new libAPI.Model(name, attrs);
 
     container[name]['factories'].push(factory);
     return factory;

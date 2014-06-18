@@ -3,12 +3,12 @@
 
   libAPI.Model = Model;
 
-  function Model(name) {
+  function Model(name, attrs) {
     if (!(this instanceof Model)) {
       return new Model(name);
     }
     this.__name__ = name;
-    configModel(this);
+    configModel(this, attrs);
   }
 
   Model.prototype.getName = function() {
@@ -109,6 +109,8 @@
     this[attr_name] = libAPI.datum.nextSequence(seq_name);
   };
 
+  return;
+
   function setAssociation(obj, name, modelName) {
     var model = new Model(modelName);
 
@@ -117,12 +119,13 @@
     return model;
   }
 
-  function configModel(obj) {
+  function configModel(obj, attrs) {
     var name = obj.getName();
     var opts = libAPI.datum.getOptions(name);
     var define = libAPI.datum.getDefined(name);
 
     define.call(obj);
+    libAPI.utils.merge(obj, attrs);
     setInherit(obj, opts.inherit);
   }
 

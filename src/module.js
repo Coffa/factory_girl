@@ -26,8 +26,8 @@
     return true;
   };
 
-  libAPI.create = function(name) {
-    return libAPI.datum.createFactory(name);
+  libAPI.create = function(name, attrs) {
+    return libAPI.datum.createFactory(name, attrs);
   };
 
   libAPI.createLists = function(name, num) {

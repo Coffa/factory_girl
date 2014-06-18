@@ -8,7 +8,7 @@
 
     for(var prop in source) {
       if (source.hasOwnProperty(prop)) {
-        if (!!!target[prop] || !keep) {
+        if (!target[prop] || !keep) {
           target[prop] = source[prop];
         }
       }
