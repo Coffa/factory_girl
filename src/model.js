@@ -1,158 +1,156 @@
-;(function(libAPI, global) {
-	'use strict';
+;(function(libAPI) {
+  'use strict';
 
-	libAPI.Model = Model;
+  libAPI.Model = Model;
 
-	function Model(name) {
-		if (!(this instanceof Model)) {
-			return new Model(name);
-		}
-		this.__name__ = name;
-		configModel(this);
-	};
+  function Model(name) {
+    if (!(this instanceof Model)) {
+      return new Model(name);
+    }
+    this.__name__ = name;
+    configModel(this);
+  }
 
-	Model.prototype.getName = function() {
-		return this.__name__;
-	};
+  Model.prototype.getName = function() {
+    return this.__name__;
+  };
 
-	Model.prototype.attributes = function() {
-		return this.toJSON(true);
-	};
+  Model.prototype.attributes = function() {
+    return this.toJSON(true);
+  };
 
-	Model.prototype.toJSON = function(excludeChild, objPrinted) {
-		var keys = Object.keys(this),
-				attrs = {};
-		if (typeof objPrinted === 'undefined' || !(objPrinted instanceof Array)) {
-			objPrinted = [];
-		}
-		objPrinted.push(this.getName());
+  Model.prototype.toJSON = function(excludeChild, objPrinted) {
+    var keys = Object.keys(this), attrs = {};
 
-		for (var i = keys.length - 1, property, key; i >= 0; i--) {
-			key = keys[i];
-			property = this[key];
-			if (property instanceof Array) {
-				property.forEach(function(iterate) {
-					if (iterate instanceof Model) {
-						if (excludeChild || objPrinted.indexOf(iterate.getName()) !== -1) return;
-						iterate = iterate.toJSON(objPrinted);
-					}
-					attrs[key] = attrs[key] || [];
-					attrs[key].push(iterate);
-				})
-			} else if (property instanceof Model) {
-				if (!excludeChild && objPrinted.indexOf(property.getName()) === -1) {
-					attrs[key] = property.toJSON(objPrinted);
-				}
-			} else if (!/^__(.)+__$/.test(key)){
-				attrs[key] = property;
-			}
-		};
-		return attrs;
-	};
+    if (typeof objPrinted === 'undefined' || !(objPrinted instanceof Array)) {
+      objPrinted = [];
+    }
+    objPrinted.push(this.getName());
 
-	Model.prototype.belongTo = function(name, modelName, ref) {
-		if (typeof ref === 'undefined') {
+    for (var i = keys.length - 1, property, key; i >= 0; i--) {
+      key = keys[i];
+      property = this[key];
+      if (property instanceof Array) {
+        property.forEach(function(iterate) {
+          if (iterate instanceof Model) {
+            if (excludeChild || objPrinted.indexOf(iterate.getName()) !== -1) return;
+            iterate = iterate.toJSON(objPrinted);
+          }
+          attrs[key] = attrs[key] || [];
+          attrs[key].push(iterate);
+        });
+      } else if (property instanceof Model) {
+        if (!excludeChild && objPrinted.indexOf(property.getName()) === -1) {
+          attrs[key] = property.toJSON(objPrinted);
+        }
+      } else if (!/^__(.)+__$/.test(key)){
+        attrs[key] = property;
+      }
+    }
+    return attrs;
+  };
+
+  Model.prototype.belongTo = function(name, modelName, ref) {
+    if (typeof ref === 'undefined') {
       ref = modelName;
       modelName = name;
 
-		}
-
+    }
     if (!modelName) {
       modelName = name;
     }
-
     if (!ref) {
       ref = modelName + '_id';
     }
-		var model = setAssociation(this, name, modelName);
-		this[ref] = model.id;
-	};
 
-	Model.prototype.hasOne = function(name, modelName, ref) {
-		if (typeof ref === 'undefined') {
+    var model = setAssociation(this, name, modelName);
+    this[ref] = model.id;
+  };
+
+  Model.prototype.hasOne = function(name, modelName, ref) {
+    if (typeof ref === 'undefined') {
       ref = modelName;
       modelName = name;
-		}
-
+    }
     if (!modelName) {
       modelName = name;
     }
-
     if (!ref) {
       ref = this.getName() + '_id';
     }
 
-		var model = setAssociation(this, name, modelName);
-		model[ref] = this.id;
-	};
+    var model = setAssociation(this, name, modelName);
+    model[ref] = this.id;
+  };
 
-	Model.prototype.hasMany = function(name, modelName, num, ref) {
+  Model.prototype.hasMany = function(name, modelName, num, ref) {
     if (typeof modelName === 'number') {
       ref = num;
       num = modelName;
       modelName = null;
     }
-
-		if (!ref) {
-			ref = this.getName() + '_id';
-		}
-
+    if (!ref) {
+      ref = this.getName() + '_id';
+    }
     if (!modelName) {
       modelName = name;
     }
 
-		var lists = [];
-		for (var i = num - 1, model; i >= 0; i--) {
-			model = new Model(modelName);
-			model[ref] = this.id;
-			lists.push(model);
-		};
-		this[name] = lists;
-	};
+    var lists = [];
+    for (var i = num - 1, model; i >= 0; i--) {
+      model = new Model(modelName);
+      model[ref] = this.id;
+      lists.push(model);
+    }
+    this[name] = lists;
+  };
 
-	Model.prototype.sequence = function(seq_name, attr_name) {
-		this[attr_name] = libAPI.datum.nextSequence(seq_name);
-	};
+  Model.prototype.sequence = function(seq_name, attr_name) {
+    this[attr_name] = libAPI.datum.nextSequence(seq_name);
+  };
 
-	function setAssociation(obj, name, modelName) {
-		var model = new Model(modelName);
-		obj[name] = model;
-		model[obj.getName()] = obj;
-		return model;
-	};
+  function setAssociation(obj, name, modelName) {
+    var model = new Model(modelName);
 
-	function configModel(obj) {
-		var name = obj.getName(),
-				opts = libAPI.datum.getOptions(name),
-				define = libAPI.datum.getDefined(name);
+    obj[name] = model;
+    model[obj.getName()] = obj;
+    return model;
+  }
 
-		define.call(obj);
-		setInherit(obj, opts.inherit);
-	};
+  function configModel(obj) {
+    var name = obj.getName();
+    var opts = libAPI.datum.getOptions(name);
+    var define = libAPI.datum.getDefined(name);
 
-	function setInherit(obj, inherit) {
-		if (!!!inherit) return;
+    define.call(obj);
+    setInherit(obj, opts.inherit);
+  }
 
-		var inheritDefine = libAPI.datum.getDefined(inherit),
-				model = new Model(inherit);
-		inheritDefine.call(model);
-		libAPI.utils.merge(obj, model, true);
+  function setInherit(obj, inherit) {
+    if (!!!inherit) return;
 
-		var keys = Object.keys(obj);
-		for (var i = keys.length - 1, key, property; i >= 0; i--) {
-			key = keys[i];
-			property = obj[key];
-			if (property instanceof Array) {
-				property.forEach(function(iterate) {
-					if (iterate instanceof Model && iterate[model.getName() + '_id']) {
-						delete iterate[model.getName() + '_id'];
-						iterate[obj.getName() + '_id'] = obj.id;
-					}
-				})
-			} else if (property instanceof Model && iterate[model.getName() + '_id']) {
-				delete property[model.getName() + '_id'];
-				property[obj.getName() + '_id'] = obj.id;
-			}
-		};
-	}
-})(libAPI = (typeof libAPI === 'undefined' ? {} : libAPI), global);
+    var inheritDefine = libAPI.datum.getDefined(inherit);
+    var model = new Model(inherit);
+
+    inheritDefine.call(model);
+    libAPI.utils.merge(obj, model, true);
+
+    var keys = Object.keys(obj);
+
+    for (var i = keys.length - 1, key, property; i >= 0; i--) {
+      key = keys[i];
+      property = obj[key];
+      if (property instanceof Array) {
+        property.forEach(function(iterate) {
+          if (iterate instanceof Model && iterate[model.getName() + '_id']) {
+            delete iterate[model.getName() + '_id'];
+            iterate[obj.getName() + '_id'] = obj.id;
+          }
+        });
+      } else if (property instanceof Model && property[model.getName() + '_id']) {
+        delete property[model.getName() + '_id'];
+        property[obj.getName() + '_id'] = obj.id;
+      }
+    }
+  }
+})(libAPI = (typeof libAPI === 'undefined' ? {} : libAPI));

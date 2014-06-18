@@ -1,77 +1,76 @@
-;(function(libAPI, global) {
-	'use strict';
+;(function(libAPI) {
+  'use strict';
 
-	var container = {};
-	var sequences = {};
+  var container = {};
+  var sequences = {};
 
-	libAPI.datum = new Data();
+  libAPI.datum = new Data();
 
-	function Data() {};
+  function Data() {}
 
-	Data.prototype.checkDefined = function(name) {
-		if (!!container[name]) {
-			return true;
-		} else {
-			throw Error(name + ' is not defined');
-		}
-	};
+  Data.prototype.checkDefined = function(name) {
+    if (!!container[name]) {
+      return true;
+    } else {
+      throw Error(name + ' is not defined');
+    }
+  };
 
-	Data.prototype.setDefined = function(name, opts, defined) {
-		this.setAlias(opts, defined);
-		container[name] = {factories: [], options: opts, defined: defined};
-	};
+  Data.prototype.setDefined = function(name, opts, defined) {
+    this.setAlias(opts, defined);
+    container[name] = {factories: [], options: opts, defined: defined};
+  };
 
-	Data.prototype.setAlias = function(opts, defined) {
-		var alias = opts.alias || [];
-		delete opts.alias;
-		if (alias instanceof Array) {
-			for (var i = alias.length - 1; i >= 0; i--) {
-				this.setDefined(alias[i], opts, defined);
-			};
-		} else {
-			this.setDefined(alias, opts, defined);
-		}
-	};
+  Data.prototype.setAlias = function(opts, defined) {
+    var alias = opts.alias || [];
+    delete opts.alias;
+    if (alias instanceof Array) {
+      for (var i = alias.length - 1; i >= 0; i--) {
+        this.setDefined(alias[i], opts, defined);
+      }
+    } else {
+      this.setDefined(alias, opts, defined);
+    }
+  };
 
-	Data.prototype.getOptions = function(name) {
-		this.checkDefined(name);
-		return container[name]['options'];
-	};
+  Data.prototype.getOptions = function(name) {
+    this.checkDefined(name);
+    return container[name]['options'];
+  };
 
-	Data.prototype.getDefined = function(name) {
-		this.checkDefined(name);
-		return container[name]['defined'];
-	};
+  Data.prototype.getDefined = function(name) {
+    this.checkDefined(name);
+    return container[name]['defined'];
+  };
 
-	Data.prototype.createFactory = function(name) {
-		var define = this.getDefined(name),
-				factory = new libAPI.Model(name);
-		container[name]['factories'].push(factory);
-		return factory;
-	};
+  Data.prototype.createFactory = function(name) {
+    var factory = new libAPI.Model(name);
 
-	Data.prototype.remove = function(name) {
-		this.checkDefined(name);
-		delete container[name];
-		return this;
-	};
+    container[name]['factories'].push(factory);
+    return factory;
+  };
 
-	Data.prototype.clear = function() {
-		var prop;
-		for(prop in container) {
-			if (container.hasOwnProperty(prop)) {
-				this.remove(prop);
-			}
-		}
-		return this;
-	};
+  Data.prototype.remove = function(name) {
+    this.checkDefined(name);
+    delete container[name];
+    return this;
+  };
 
-	Data.prototype.setSequence = function(name, callback) {
-		sequences[name] = {constructor: callback, next_id: 0};
-	};
+  Data.prototype.clear = function() {
+    for(var prop in container) {
+      if (container.hasOwnProperty(prop)) {
+        this.remove(prop);
+      }
+    }
+    return this;
+  };
 
-	Data.prototype.nextSequence = function(name) {
-		sequences[name]['next_id'] += 1;
-		return sequences[name]['constructor'](sequences[name]['next_id']);
-	};
-})(libAPI = (typeof libAPI === 'undefined' ? {} : libAPI), global);
+  Data.prototype.setSequence = function(name, callback) {
+    sequences[name] = {constructor: callback, next_id: 0};
+  };
+
+  Data.prototype.nextSequence = function(name) {
+    sequences[name]['next_id'] += 1;
+    return sequences[name]['constructor'](sequences[name]['next_id']);
+  };
+})(libAPI = (typeof libAPI === 'undefined' ? {} : libAPI));
