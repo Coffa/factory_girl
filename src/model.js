@@ -50,7 +50,7 @@
     return attrs;
   };
 
-  Model.prototype.belongTo = function(name, factoryName, ref) {
+  Model.prototype.belongsTo = function(name, factoryName, ref) {
     return setAssociation(this, name, factoryName, ref, true);
   };
 
