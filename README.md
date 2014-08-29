@@ -92,7 +92,7 @@ FactoryGirl.hasMany(name[, factoryName], num[, ref])
 FactoryGirl.define('profile', function() {
 	this.id = 2;
 	this.label = 'Dr';
-	this.belongTo('user');
+	this.belongsTo('user');
 })
 
 FactoryGirl.define('place', function() {

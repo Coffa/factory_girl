@@ -20,7 +20,7 @@ defineFactoryGirl = function(){
   	FactoryGirl.define('profile', function() {
   		this.sequence('s_id', 'id');
   		this.emotion = 'Happy';
-  		this.belongTo('user');
+  		this.belongsTo('user');
   	})
 
   	FactoryGirl.define('place', function() {

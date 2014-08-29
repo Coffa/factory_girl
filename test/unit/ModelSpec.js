@@ -99,7 +99,7 @@ describe('Model', function () {
 		});
 	});
 
-	describe('#belongTo()', function () {
+	describe('#belongsTo()', function () {
 		it('profile belong to user', function () {
 			expect(profile.user).to.instanceof(libAPI.Model);
 		});
