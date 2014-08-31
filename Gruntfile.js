@@ -11,6 +11,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-connect');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-karma');
+  grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadTasks('lib/grunt');
 
   var version = util.getVersion();
@@ -67,6 +68,13 @@ module.exports = function(grunt) {
       build: {
         options: {archive: 'build/' + dist +'.zip', mode: 'zip'},
         src: ['**'], cwd: 'build', expand: true, dot: true, dest: dist + '/'
+      }
+    },
+
+    watch: {
+      test: {
+        files: ['src/**/*.js', 'test/**/*.js'],
+        tasks: ['test']
       }
     }
   });

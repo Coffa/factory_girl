@@ -57,14 +57,38 @@ FactoryGirl.define('user', {alias: 'doctor'}, function () {
 })
 ```
 
-`FactorGirl.create('user')` is equal to `FactoryGirl.create('doctor')`
+`FactoryGirl.create('user')` is equal to `FactoryGirl.create('doctor')`
 
 another thing is you can pass to array to alias  `{alias: ['doctor', 'patient']`
+
+### Auto generated `id` property
+
+``` js
+FactoryGirl.define('user', function() {
+  this.autoId();
+  this.name = 'Minh Quy';
+});
+
+FactoryGirl.define('profile', function() {
+  this.autoId('profile_id');
+  this.website = 'http://mquy.github.io/';
+});
+
+var user1 = FactoryGirl.create('user');
+var user2 = FactoryGirl.create('user');
+user1.id // ==> 1
+user2.id // ==> 2
+
+var profile1 = FactoryGirl.create('profile');
+var profile2 = FactoryGirl.create('profile');
+profile1.profile_id // ==> 1
+profile2.profile_id // ==> 2
+```
 
 ### Inheritance
 
 ``` js
-FactorlGirl.define('doctor', {inherit: 'user'}, function() {
+FactoryGirl.define('doctor', {inherit: 'user'}, function() {
 	this.id = 2;
 	this.label = 'Dr';
 })
@@ -102,6 +126,7 @@ FactoryGirl.define('place', function() {
 })
 
 FactoryGirl.define('user', function() {
+  this.id = 1;
   this.name = 'John';
   this.hasMany('places', 'place');
 })

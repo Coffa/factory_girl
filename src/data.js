@@ -77,4 +77,13 @@
     sequences[name]['next_id'] += 1;
     return sequences[name]['constructor'](sequences[name]['next_id']);
   };
+
+  Data.prototype.getObjId = function(name) {
+    this.checkDefined(name);
+    if (typeof container[name]['obj_id'] !== 'number') {
+      container[name]['obj_id'] = 1;
+    }
+
+    return container[name]['obj_id']++;
+  };
 })(libAPI = (typeof libAPI === 'undefined' ? {} : libAPI));

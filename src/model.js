@@ -80,6 +80,13 @@
     this[attr_name] = libAPI.datum.nextSequence(seq_name);
   };
 
+  Model.prototype.autoId = function(attr_name) {
+    if (!attr_name) {
+      attr_name = 'id';
+    }
+    this[attr_name] = libAPI.datum.getObjId(this.getName());
+  }
+
   return;
 
   function setAssociation(obj, name, factoryName, ref, flag) {

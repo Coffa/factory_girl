@@ -16,6 +16,43 @@ describe('Model', function () {
 		expect(libAPI.Model).to.exist;
 	});
 
+	describe('#autoId()', function () {
+		it('generates an id property that is auto incremented', function () {
+			FactoryGirl.define('person', function () {
+				this.autoId();
+				this.name = 'Minh Quy';
+			});
+
+			person1 = libAPI.datum.createFactory('person');
+			person2 = libAPI.datum.createFactory('person');
+			person3 = libAPI.datum.createFactory('person', {
+				id: 28
+			});
+
+			expect(person1.id).to.equal(1);
+			expect(person2.id).to.equal(2);
+			expect(person3.id).to.equal(28);
+		});
+
+		it('takes a parameter to rename the property', function () {
+			FactoryGirl.define('other_person', function () {
+				this.autoId('person_id');
+				this.name = 'Minh Quy';
+			});
+
+
+			person1 = libAPI.datum.createFactory('other_person');
+			person2 = libAPI.datum.createFactory('other_person');
+			person3 = libAPI.datum.createFactory('other_person', {
+				person_id: 28
+			});
+
+			expect(person1.person_id).to.equal(1);
+			expect(person2.person_id).to.equal(2);
+			expect(person3.person_id).to.equal(28);
+		});
+	});
+
 	describe('#getName()', function () {
 
 		it('has factory user\'s name', function () {
