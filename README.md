@@ -102,6 +102,7 @@ FactoryGirl.define('place', function() {
 })
 
 FactoryGirl.define('user', function() {
+  this.id = 1;
   this.name = 'John';
   this.hasMany('places', 'place');
 })
