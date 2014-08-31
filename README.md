@@ -57,14 +57,14 @@ FactoryGirl.define('user', {alias: 'doctor'}, function () {
 })
 ```
 
-`FactorGirl.create('user')` is equal to `FactoryGirl.create('doctor')`
+`FactoryGirl.create('user')` is equal to `FactoryGirl.create('doctor')`
 
 another thing is you can pass to array to alias  `{alias: ['doctor', 'patient']`
 
 ### Inheritance
 
 ``` js
-FactorlGirl.define('doctor', {inherit: 'user'}, function() {
+FactoryGirl.define('doctor', {inherit: 'user'}, function() {
 	this.id = 2;
 	this.label = 'Dr';
 })
