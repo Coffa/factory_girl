@@ -61,6 +61,30 @@ FactoryGirl.define('user', {alias: 'doctor'}, function () {
 
 another thing is you can pass to array to alias  `{alias: ['doctor', 'patient']`
 
+### Auto generated `id` property
+
+``` js
+FactoryGirl.define('user', function() {
+  this.autoId();
+  this.name = 'Minh Quy';
+});
+
+FactoryGirl.define('profile', function() {
+  this.autoId('profile_id');
+  this.website = 'http://mquy.github.io/';
+});
+
+var user1 = FactoryGirl.create('user');
+var user2 = FactoryGirl.create('user');
+user1.id // ==> 1
+user2.id // ==> 2
+
+var profile1 = FactoryGirl.create('profile');
+var profile2 = FactoryGirl.create('profile');
+profile1.profile_id // ==> 1
+profile2.profile_id // ==> 2
+```
+
 ### Inheritance
 
 ``` js
