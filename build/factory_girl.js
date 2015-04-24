@@ -243,10 +243,10 @@ libAPI.Model = Model;
 ;(function(FactoryGirl, libAPI) {
 
 libAPI.version = {
-    full: '0.2.0',
+    full: '0.2.1',
     major: 0,
     minor: 2,
-    dot: 0,
+    dot: 1,
     codeName: 'sapphire'
   };
 
@@ -335,4 +335,4 @@ libAPI.version = {
   libAPI = (typeof libAPI === 'undefined' ? {} : libAPI)
 );
 
-})(FactoryGirl = ('undefined' === typeof module ? {} : module.exports), {}, this);
+})(FactoryGirl = (('undefined' !== typeof module && module.exports) ? module.exports : {}), {}, this);
