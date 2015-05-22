@@ -30,11 +30,11 @@
     return libAPI.datum.createFactory(name, attrs);
   };
 
-  libAPI.createLists = function(name, num) {
+  libAPI.createLists = function(name, num, attrs) {
     var lists = [];
 
     while(num--) {
-      lists.push(libAPI.datum.createFactory(name));
+      lists.push(libAPI.datum.createFactory(name, attrs));
     }
     return lists;
   };
