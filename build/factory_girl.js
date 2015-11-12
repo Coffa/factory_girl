@@ -243,11 +243,11 @@ libAPI.Model = Model;
 ;(function(FactoryGirl, libAPI) {
 
 libAPI.version = {
-    full: '0.2.1',
+    full: '0.2.2',
     major: 0,
     minor: 2,
-    dot: 1,
-    codeName: 'sapphire'
+    dot: 2,
+    codeName: 'ruby'
   };
 
   libAPI.define = function(name) {
@@ -271,11 +271,11 @@ libAPI.version = {
     return libAPI.datum.createFactory(name, attrs);
   };
 
-  libAPI.createLists = function(name, num) {
+  libAPI.createLists = function(name, num, attrs) {
     var lists = [];
 
     while(num--) {
-      lists.push(libAPI.datum.createFactory(name));
+      lists.push(libAPI.datum.createFactory(name, attrs));
     }
     return lists;
   };

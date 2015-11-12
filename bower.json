@@ -1,0 +1,18 @@
+{
+  "name": "factory_girl",
+  "main": "index.js",
+  "version": "0.2.2",
+  "homepage": "https://github.com/Coffa/factory_girl",
+  "authors": [
+    "MQuy <sugiacupit@gmail.com>"
+  ],
+  "main": "build/factory_girl.js",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
