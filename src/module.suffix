@@ -1,1 +1,1 @@
-})(FactoryGirl = ('undefined' === typeof module ? {} : module.exports), {}, this);
+})(FactoryGirl = (('undefined' !== typeof module && module.exports) ? module.exports : {}), {}, this);
