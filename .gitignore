@@ -2,3 +2,5 @@
 test-results.xml
 coverage/*
 build/*.zip
+*.swp
+*.swo
