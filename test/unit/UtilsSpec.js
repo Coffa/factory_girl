@@ -31,6 +31,34 @@ describe('Utils', function () {
 				libAPI.utils.merge(target, source);
 				expect(target).to.eql({mocha:false, jasmine: false, qunit: true});
 			});
+
+			describe('with embedded objects', function () {
+				var targetEmbedded, sourceEmbedded;
+
+				beforeEach(function () {
+					targetEmbedded = {foo: false, bar: true};
+					target.embedded = targetEmbedded;
+					sourceEmbedded = {foo: true, rab: false};
+				});
+
+				it('no changing when embedded source empty', function () {
+					var origin = targetEmbedded;
+					libAPI.utils.merge(target, source);
+					expect(target.embedded).to.eql(origin);
+				});
+
+				it('with keep', function () {
+					source.embedded = sourceEmbedded;
+					libAPI.utils.merge(target, source, true);
+					expect(target.embedded).to.eql({foo: false, bar: true, rab: false});
+				});
+
+				it('without keep', function () {
+					source.embedded = sourceEmbedded;
+					libAPI.utils.merge(target, source);
+					expect(target.embedded).to.eql({foo: true, bar: true, rab: false});
+				});
+			});
 		});
 	});
 });
