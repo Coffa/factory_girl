@@ -8,7 +8,9 @@
 
     for(var prop in source) {
       if (source.hasOwnProperty(prop)) {
-        if (!target[prop] || !keep) {
+        if (typeof(target[prop]) === 'object' && typeof(source[prop]) === 'object') {
+          libAPI.utils.merge(target[prop], source[prop], keep);
+        } else if (!target.hasOwnProperty(prop) || !keep) {
           target[prop] = source[prop];
         }
       }
