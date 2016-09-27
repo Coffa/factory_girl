@@ -4,4 +4,7 @@
  * License: MIT
  */
 
-(function(FactoryGirl, libAPI, global) {
+if (typeof FactoryGirl === 'undefined') {
+  FactoryGirl = 'undefined' !== typeof module && module.exports || {};
+
+  (function(FactoryGirl, libAPI, global) {
