@@ -47,7 +47,7 @@
     "karma-phantomjs-launcher": "^0.1.4",
     "karma-safari-launcher": "~0.1.0",
     "karma-script-launcher": "~0.1.0",
-    "shelljs": "~0.1.4",
+    "shelljs": "~0.8.3",
     "sinon": "~1.7.3"
   }
 }
