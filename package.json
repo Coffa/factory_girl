@@ -39,7 +39,7 @@
     "karma-firefox-launcher": "~0.1.0",
     "karma-growl-reporter": "~0.1.1",
     "karma-ie-launcher": "~0.1.1",
-    "karma-coverage": "~0.1.0",
+    "karma-coverage": "~2.0.2",
     "karma-junit-reporter": "https://github.com/karma-runner/karma-junit-reporter/tarball/karma-0.11",
     "karma-mocha": "=0.1.0",
     "karma-ng-scenario": "~0.1.0",
